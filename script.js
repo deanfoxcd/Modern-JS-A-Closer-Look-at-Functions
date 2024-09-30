@@ -251,3 +251,79 @@ document
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
 poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
 */
+
+// Immediately Invoked Function Expressions (IIFE)
+/*
+// Normal
+const runOnce = function () {
+  console.log("This won't run again");
+};
+runOnce();
+
+// IIFE
+(function () {
+  console.log('This will never run again');
+})();
+
+// Arrow IIFE
+(() => console.log('This will ALSO never run again'))();
+
+{
+  const isPrivate = 23; // Not accessible outside this block
+  var notPrivate = 46; // Accessible outside this block
+}
+*/
+
+// Closures
+/*
+// Example 1
+let f;
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+// g(); // this sets up the variable environment
+// f(); // acceses the g variable env. through closure
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f();
+console.dir(f); // Scope: Closure: g()
+h(); // Overwrites f
+f();
+console.dir(f); // Scope: Closure: h()
+
+// Example 2
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(`We are now boarding all ${n} passengers`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds`);
+};
+
+const perGroup = 1000; // Proof that the function will prioritise the closure variable
+boardPassengers(180, 3);
+*/
+
+// **CODING CHALLENGE #2**
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+  document
+    .querySelector('body')
+    .addEventListener('click', () => (header.style.color = 'blue'));
+})();
