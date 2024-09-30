@@ -55,4 +55,141 @@ newPassport(dean);
 checkIn(flight, dean); // Passport will be wrong
 */
 
-// Callback Functions
+// Callback Functions/
+/*
+const oneWord = function (str) {
+  return str.replaceAll(' ', '').toLowerCase();
+};
+
+const upperFirstWord = function (str) {
+  const [first, ...others] = str.split(' ');
+  return [first.toUpperCase(), ...others].join(' ');
+};
+
+// Higher Order Function
+const transformer = function (str, fn) {
+  console.log(`Original string: ${str}`);
+  console.log(`Transformed string: ${fn(str)}`);
+  console.log(`Transformed by ${fn.name}`);
+};
+transformer('JavaScript is the best', upperFirstWord);
+transformer('JavaScript is the best', oneWord);
+*/
+
+// Functions returning other functions
+/*
+const greet = function (greeting) {
+  return function (name) {
+    console.log(`${greeting}, ${name}`);
+  };
+};
+
+// As an arrow function
+const greetArr = greeting => name => console.log(`${greeting}, ${name}`);
+
+const greeterHey = greet('Hey');
+greeterHey('Dean');
+
+greet('Hello')('Belle');
+greetArr('Hi')('Dan');
+*/
+
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  book(flightNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+    );
+    this.bookings.push({
+      flight: `${this.iataCode}${flightNum}`,
+      name,
+    });
+  },
+};
+lufthansa.book(123, 'Dean Fox');
+lufthansa.book(456, 'Isabelle Fox');
+console.log(lufthansa);
+
+const eurowings = {
+  airline: 'Eurowings',
+  iataCode: 'EW',
+  bookings: [],
+};
+
+const book = lufthansa.book; // Makes the function resuable
+
+// book(23, 'Dan Fox'); // Won't work because 'this' now points to undefined
+
+// Call method
+book.call(eurowings, 23, 'Dan Fox'); // Calls the book function with 'this' set to eurowings
+console.log(eurowings);
+
+book.call(lufthansa, 453, 'Stacy Fox');
+console.log(lufthansa);
+
+const swiss = {
+  airline: 'Swiss Airlines',
+  iataCode: 'LX',
+  bookings: [],
+};
+
+book.call(swiss, 987, 'Madi Norris');
+
+// Apply method
+const flightData = [583, 'Aislynn Fox'];
+book.apply(swiss, flightData);
+console.log(swiss);
+
+book.call(swiss, ...flightData); // Same as above, just cleaner
+
+// Bind Method
+// Does not immediately call the function
+
+const bookLH = book.bind(lufthansa);
+const bookEW = book.bind(eurowings); // Returns a new function where the this keyword will always be eurowings
+const bookLX = book.bind(swiss);
+
+bookEW(23, 'Atwood Fox');
+
+const bookEW23 = book.bind(eurowings, 23); // Sets the argument permanently (flightNum = 23)
+bookEW23('Nellie Fox');
+
+// With event listeners
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+  this.planes++;
+  console.log(this.planes);
+};
+document.querySelector('.buy').addEventListener('click', lufthansa.buyPlane);
+//The above won't work. The this keyword has become the element of .buy
+
+const buyPlane = lufthansa.buyPlane;
+const buyPlaneLH = buyPlane.bind(lufthansa);
+// document.querySelector('.buy').addEventListener('click', buyPlaneLH);
+// The above will work, it was my best guess. But the below is best
+document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+
+// Partial Application
+
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.1, 200));
+
+const addVAT = addTax.bind(null, 0.23); // To keep the rate constant at 23%
+console.log(addVAT(100));
+
+// Challenge (I failed)
+// const addTax2 = function (rate) {
+//   return function addTax(value) {
+//     return value + value * rate;
+//   };
+// };
+
+// As arrow function (I figured this out)
+const addTax2 = rate => value => value + value * rate;
+
+const addVAT2 = addTax2(0.23);
+console.log(addVAT2(100));
