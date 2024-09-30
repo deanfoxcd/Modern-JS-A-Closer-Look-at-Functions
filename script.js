@@ -94,6 +94,8 @@ greet('Hello')('Belle');
 greetArr('Hi')('Dan');
 */
 
+// Call, Apply, and Bind methods
+/*
 const lufthansa = {
   airline: 'Lufthansa',
   iataCode: 'LH',
@@ -193,3 +195,59 @@ const addTax2 = rate => value => value + value * rate;
 
 const addVAT2 = addTax2(0.23);
 console.log(addVAT2(100));
+*/
+
+// **CODING CHALLENGE #1**
+/*
+
+const poll = {
+  question: 'What is your favourite programming language?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+  // This generates [0, 0, 0, 0]. More in the next section 😃
+  answers: new Array(4).fill(0),
+
+  registerNewAnswer() {
+    // My solution
+    // const answer = window.prompt(
+    //   `${this.question}: \n ${this.options[0]} \n ${this.options[1]} \n ${this.options[2]} \n ${this.options[3]} \n (Write option number)`
+    // );
+
+    // Course solution
+    const answer = Number(
+      window.prompt(
+        `${this.question}\n${this.options.join('\n')}\n(Write option number)`
+      )
+    );
+
+    // My solution. Won't work if the options increase
+    //     if (
+    //       typeof Number(answer) === 'number' &&
+    //       answer >= 0 &&
+    //       answer < this.answers.length
+    //     ) {
+    //       this.answers[answer]++;
+    //       console.log(this.answers);
+    //     }
+    //   },
+
+    // Course solution (using shortcircuiting)
+    typeof answer === 'number' &&
+      answer < this.answers.length &&
+      this.answers[answer]++;
+    this.displayResults('string');
+  },
+
+  displayResults(type = 'array') {
+    type === 'array'
+      ? console.log(this.answers)
+      : console.log(`Poll results are ${this.answers.join(', ')}`);
+  },
+};
+
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
+poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+*/
